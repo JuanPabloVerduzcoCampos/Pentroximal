@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encriptador personalizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Encriptador personalizado</h1>
+        <input type="text" id="inputTexto" placeholder="Ingrese texto o número" />
+        <button onclick="encriptar()">Encriptar</button>
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <script>
+        function decimalAHexadecimalPersonalizado(decimal) {
+            if (decimal === 0) {
+                return ".";
+            }
+
+            const hexChars = ".123456789_aeiou";
+            let resultado = [];
+
+            while (decimal > 0) {
+                let residuo = decimal % hexChars.length;
+                resultado.push(hexChars[residuo]);
+                decimal = Math.floor(decimal / hexChars.length);
+            }
+
+            // Invertir la lista para obtener el resultado correcto
+            resultado.reverse();
+
+            // Unir los caracteres en una sola cadena
+            return resultado.join('');
+        }
+
+        function textoAEncriptado(textoONumero) {
+            if (!isNaN(textoONumero)) {
+                // Si es un número, encriptarlo directamente
+                return decimalAHexadecimalPersonalizado(parseInt(textoONumero, 10));
+            } else {
+                // Si es texto, encriptar cada carácter
+                let resultado = [];
+                for (let caracter of textoONumero) {
+                    let valorAscii = caracter.charCodeAt(0);
+                    let encriptado = decimalAHexadecimalPersonalizado(valorAscii);
+                    resultado.push(encriptado);
+                }
+                return resultado.join('');
+            }
+        }
+
+        function encriptar() {
+            let inputTexto = document.getElementById('inputTexto').value;
+            let resultado = textoAEncriptado(inputTexto);
+            document.getElementById('resultado').innerText = `Resultado encriptado: ${resultado}`;
+        }
+    </script>
+</body>
+</html>
